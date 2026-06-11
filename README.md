@@ -21,3 +21,8 @@ Early-stage development. The project currently contains a containerized FastAPI 
 ![image](image/README/FunctionalView.png)
 
 The diagram above showcases the planned modules for V1 of this project. As this is web based, a mobile UI will be planned for a future version. The main purpose of V1 is to build the foundations for the main project and to learn the stack better. However this is subject to change in the future.
+
+### Module Dependency View
+![image](image/README/DependencyView.png)
+
+This diagram showcases the dependencies between each module. The database arrow points only to the border of the logic tier to avoid bloat. It shows how each module read/writes on the DB.
