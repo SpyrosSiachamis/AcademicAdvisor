@@ -18,6 +18,18 @@ Early-stage development. The project currently contains a containerized FastAPI 
 - Agentic tooling layer
 - Redis
 
+## V1 Scope
+
+The first version focuses on the core academic planning engine:
+
+- Course catalog
+- Academic profile with completed/failed/in-progress courses
+- User preferences and goals
+- Course ratings
+- Prerequisite and eligibility checks
+- Deterministic course recommendations
+- Rule-based recommendation explanations
+
 ## Planned V1 Architecture
 
 ### Functional View
