@@ -1,13 +1,13 @@
 services:
   backend:
     build:
-      context: ./Backend
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: FastAPI_Backend
+    container_name: AcademicAdvisor-backend
     ports:
       - '8000:8000'
     volumes:
-      - ./Backend/src:/app/src
+      - ./backend/src:/app/src
     command: python -m uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - app-network
