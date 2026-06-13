@@ -43,3 +43,11 @@ The diagram above showcases the planned modules for V1 of this project. As this 
 ![image](docs/architecture/DependencyView.png)
 
 This diagram showcases the dependencies between each module. The database arrow points only to the border of the logic tier to avoid bloat. It shows how each module read/writes on the DB.
+
+## ER Diagram
+
+![ER Diagram](docs/Database/ER.png)
+
+The ER diagram above shows the current planned database schema for the project. It supports the course catalog, course ratings, user course attempts, recommendation-related data, and separate university/department modeling.
+
+The prerequisites and suggested fields are temporary unnormalized fields. They will later be moved into dedicated relationship tables to avoid storing structured course relationships as raw text and to support proper eligibility and recommendation logic.
