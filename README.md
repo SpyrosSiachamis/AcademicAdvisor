@@ -6,6 +6,16 @@ An academic decision-support system that recommends courses and academic paths b
 
 Early-stage development. The project currently contains a containerized FastAPI backend used for experimenting with API structure, validation, and backend architecture before implementing the main recommendation system. Students already use AI manually to research courses and plan their academic path. AcademicAdvisor turns that into a structured, data-driven advising system.
 
+## API Documentation
+
+The current course catalog endpoints are documented in
+[docs/api/courses.md](docs/api/courses.md).
+
+When the backend is running, FastAPI also provides interactive documentation:
+
+- Swagger UI: `http://localhost:8000/docs`
+- ReDoc: `http://localhost:8000/redoc`
+
 ## Planned Stack for V1
 
 - FastAPI
@@ -29,6 +39,16 @@ The first version focuses on the core academic planning engine:
 - Prerequisite and eligibility checks
 - Deterministic course recommendations
 - Rule-based recommendation explanations
+- ECTS progress ring showing completed credits toward the overall degree target
+
+
+The V1 progress ring is an ECTS-only progress indicator and does not perform full degree-audit validation.
+
+Later versions will support multiple progress rings for requirement categories such as core courses and electives.
+
+## Post-V1 / Pre-Production Scope
+
+- Degree Constraints Module for validating program requirements, required courses, elective rules, ECTS requirements, category limits, thesis requirements, and graduation progress.
 
 ## Planned V1 Architecture
 
