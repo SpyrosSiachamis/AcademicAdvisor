@@ -10,5 +10,5 @@ class Course(BaseModel):
     prerequisites: list[Annotated[int, Field(ge=1)]] = Field(default_factory=list) # Not permament, will be normalized
     suggested: list[Annotated[int, Field(ge=1)]] = Field(default_factory=list)     # Not permament, will be normalized
     contact_email: EmailStr | None = None
-    difficulty_estimate: Annotated[float, Field(ge=1, le=5)]
-    workload_estimate: Annotated[float, Field(ge=1, le=5)]
+    difficulty_estimate: Annotated[float, Field(ge=1, le=5)] | None = None
+    workload_estimate: Annotated[float, Field(ge=1, le=5)] | None = None

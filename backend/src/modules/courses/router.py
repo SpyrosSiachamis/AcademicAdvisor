@@ -118,7 +118,6 @@ async def delete_course_by_id(course_id: int):
     Raises:
         HTTPException: If no course has the requested ID.
     """
-    print("Hello")
     deleted_course = delete_course_from_id(course_id)
     if(not deleted_course):
         raise HTTPException(status_code=404, detail="Course not found")

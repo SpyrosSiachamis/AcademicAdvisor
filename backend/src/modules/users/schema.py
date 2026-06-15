@@ -7,7 +7,7 @@ class UserCreate(BaseModel):
     id: Annotated[int, Field(ge=1)] #TODO remove when Database replaces in-memory storage
     username: Annotated[str, Field(min_length=3, max_length=30)]
     email: EmailStr
-    password: Annotated[str, Field(min_length=5)] #TODO Temporary password field, will need to be hashed
+    password: Annotated[str, Field(min_length=5)] 
     department_id: Annotated[int, Field(ge=1)]
 
 class UserRead(BaseModel):
