@@ -5,12 +5,12 @@ from typing import Any
 
 courses: list[dict[str,Any]] = []
 
-def create_course(course: Course) -> dict | None:
+def create_course(course: Course) -> dict[str,Any] | None:
     """Store a course unless its ID is already in use.
 
     Args:
         course: Validated course model to store.
-
+`
     Returns:
         The serialized course data when creation succeeds, or ``None`` when a
         course with the same ID already exists.
