@@ -2,12 +2,7 @@ from typing import Any
 from .schema import DepartmentCreate,DepartmentRead
 from ..university.service import universities
 departments: list[dict[str,Any]] = []
-
-"""
-TODO: - Rename flag to university_exists
-- Make department name unique only within the same university
-- Split duplicate department and missing university errors later
-"""
+# TODO: - Rename flag to university_exists., - Make department name unique only within the same university., - Split duplicate department and missing university errors later.
 def create_department(department_data: dict[str,Any]) -> DepartmentRead | None:
     flag:bool = False
     for department in departments:
