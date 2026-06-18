@@ -17,12 +17,12 @@ class CoursePeriod(Enum):
 
 class CourseAttempt(BaseModel):
     CURRENT_YEAR: ClassVar[datetime.datetime] = datetime.datetime.now()
-    attempt_id: Annotated[int, Field(gt=0)]
+    id: Annotated[int, Field(gt=0)]
     course_id: Annotated[int, Field(gt=0)]
     user_id: Annotated[int, Field(gt=0)]
     status: Status
     grade: Annotated[float, Field(ge=0, le=10)] | None
     course_period: CoursePeriod
     semester: Annotated[int, Field(ge=1, le=20)]
-    academic_year: Annotated[int, Field(gt=2000, lt=CURRENT_YEAR.year)] # eg. 2025 = "2025-2026". So. academic year - academic_year+1
+    academic_year: Annotated[int, Field(gt=2000, le=CURRENT_YEAR.year)] # eg. 2025 = "2025-2026". So. academic year - academic_year+1
     attempt_number: Annotated[int, Field(gt=0)]
