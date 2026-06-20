@@ -1,10 +1,14 @@
 """HTTP routes for creating and retrieving courses."""
 
 from fastapi import APIRouter, HTTPException
-from .schema import Course
-from .service import create_course, get_all_courses, get_course_by_id, get_course_by_code,delete_course_from_id, delete_course_from_code
+from .schema import Course, CourseUpdate
+from .service import create_course, get_all_courses, get_course_by_id, get_course_by_code, update_course, delete_course_from_id, delete_course_from_code
 
 router = APIRouter(prefix="/courses", tags=["courses"])
+
+@router.post('/')
+async def create_course_route(course: Course):
+    return await add_course(course)
 
 @router.post('/add')
 async def add_course(course: Course):
@@ -21,7 +25,7 @@ async def add_course(course: Course):
     """
     result = create_course(course)
     if(result is None):
-        raise HTTPException(status_code=409, detail="Duplicate ID")
+        raise HTTPException(status_code=409, detail="Duplicate course or missing department")
     return{
         "message": "Course Created",
         "created_course": result
@@ -83,7 +87,17 @@ async def get_course_with_id(course_id: int):
         "course": result
     }
 
-@router.delete("/code{course_code}")
+@router.put("/{course_id}")
+async def update_course_by_id(course_id: int, course_update: CourseUpdate):
+    result = update_course(course_id, course_update)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Course not found, duplicate code, or missing department")
+    return {
+        "message": "Course updated successfully",
+        "course": result
+    }
+
+@router.delete("/code/{course_code}")
 async def delete_course_by_code(course_code: str):
     """Delete a course by its course code.
 
@@ -97,7 +111,7 @@ async def delete_course_by_code(course_code: str):
         HTTPException: If no course has the requested code.
     """
     deleted_course = delete_course_from_code(course_code)
-    if(deleted_course is None):
+    if(not deleted_course):
         raise HTTPException(status_code=404, detail="Course not found")
     return{
         "message": "Course deleted successfully",

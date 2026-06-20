@@ -1,12 +1,16 @@
 from fastapi import APIRouter, HTTPException
-from .schema import University
+from .schema import University, UniversityUpdate
 from typing import Any
-from .service import create_university, get_all_universities, get_university, delete_university
+from .service import create_university, get_all_universities, get_university, update_university, delete_university
 router = APIRouter(prefix="/university", tags=["university"])
+
+@router.post('/')
+async def create_university_route(university: University):
+    return await add_university(university)
 
 @router.post('/add')
 async def add_university(university: University):
-    university_data: dict[str, Any] = university.model_dump()
+    university_data: dict[str, Any] = university.model_dump(mode="json")
     result = create_university(university_data)
     if(result is None):
         raise HTTPException(status_code=409, detail="Duplicate University Found")
@@ -30,6 +34,16 @@ async def get_university_by_id(university_id: int):
         raise HTTPException(status_code=404, detail="University not found")
     return {
         "message": "Successfully found university",
+        "university": result
+    }
+
+@router.put("/{university_id}")
+async def update_university_by_id(university_id: int, university_update: UniversityUpdate):
+    result = update_university(university_id, university_update)
+    if(result is None):
+        raise HTTPException(status_code=404, detail="University not found or duplicate name")
+    return {
+        "message": "University updated successfully",
         "university": result
     }
 

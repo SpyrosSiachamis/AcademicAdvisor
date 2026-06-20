@@ -15,3 +15,9 @@ class UserRead(BaseModel):
     username: Annotated[str, Field(min_length=3, max_length=30)]
     email: EmailStr
     department_id: Annotated[int, Field(ge=1)]
+
+class UserUpdate(BaseModel):
+    username: Annotated[str, Field(min_length=3, max_length=30)] | None = None
+    email: EmailStr | None = None
+    password: Annotated[str, Field(min_length=5)] | None = None
+    department_id: Annotated[int, Field(ge=1)] | None = None

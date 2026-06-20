@@ -25,7 +25,7 @@ production use.
 | Field | Type | Constraints |
 | --- | --- | --- |
 | `id` | integer | At least `1`; must be unique |
-| `university_id` | integer | At least `1` |
+| `department_id` | integer | At least `1` |
 | `ects` | integer | Greater than `0` and less than `40` |
 | `code` | string | 2-20 characters; format `AA-000` or `AAA-000` |
 | `name` | string | 2-50 characters |
@@ -43,7 +43,7 @@ Example request body:
 ```json
 {
   "id": 1,
-  "university_id": 1,
+  "department_id": 1,
   "ects": 6,
   "code": "CS-101",
   "name": "Introduction to Computer Science",
@@ -120,7 +120,7 @@ curl -X POST http://localhost:8000/courses/add \
   -H 'Content-Type: application/json' \
   -d '{
     "id": 1,
-    "university_id": 1,
+    "department_id": 1,
     "ects": 8,
     "code": "HY-100",
     "name": "Intro to CS",

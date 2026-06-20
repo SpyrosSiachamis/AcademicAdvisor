@@ -9,7 +9,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-2" parent="MfBtu3gmphk7rpzaGqzh-1" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+university_id (FK)&lt;br&gt;&lt;div&gt;&lt;div&gt;+ects&lt;/div&gt;&lt;div&gt;+code&lt;/div&gt;&lt;div&gt;+name&lt;/div&gt;&lt;div&gt;+prerequisites&lt;br&gt;+suggested&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+contact_email&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+difficulty_estimate&lt;/div&gt;&lt;div&gt;+workload_estimate&lt;/div&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-2" parent="MfBtu3gmphk7rpzaGqzh-1" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+department_id (FK)&lt;br&gt;&lt;div&gt;&lt;div&gt;+ects&lt;/div&gt;&lt;div&gt;+code&lt;/div&gt;&lt;div&gt;+name&lt;/div&gt;&lt;div&gt;+prerequisites&lt;br&gt;+suggested&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;+contact_email&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;&lt;div&gt;+difficulty_estimate&lt;/div&gt;&lt;div&gt;+workload_estimate&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="160" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-3" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="User" vertex="1">
@@ -17,7 +17,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-4" parent="MfBtu3gmphk7rpzaGqzh-3" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+username&lt;/div&gt;&lt;div&gt;+password_hash&lt;/div&gt;&lt;div&gt;+email&lt;/div&gt;&lt;div&gt;+department_id&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-4" parent="MfBtu3gmphk7rpzaGqzh-3" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+username&lt;/div&gt;&lt;div&gt;+password_hash&lt;/div&gt;&lt;div&gt;+email&lt;/div&gt;&lt;div&gt;+department_id (FK)&lt;/div&gt;" vertex="1">
           <mxGeometry height="90" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-9" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="Tag" vertex="1">
@@ -25,7 +25,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-10" parent="MfBtu3gmphk7rpzaGqzh-9" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id&lt;div&gt;+name&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-10" parent="MfBtu3gmphk7rpzaGqzh-9" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+name&lt;/div&gt;" vertex="1">
           <mxGeometry height="40" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-13" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="Course_Tag_Assignment" vertex="1">
@@ -33,7 +33,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-14" parent="MfBtu3gmphk7rpzaGqzh-13" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+course_id (PK/FK)&lt;div&gt;+tag_id (PK/FK)&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-14" parent="MfBtu3gmphk7rpzaGqzh-13" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+course_id (FK)&lt;/div&gt;&lt;div&gt;+tag_id (FK)&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-17" edge="1" parent="1" source="MfBtu3gmphk7rpzaGqzh-10" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="MfBtu3gmphk7rpzaGqzh-13" value="">
@@ -104,7 +104,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-35" parent="MfBtu3gmphk7rpzaGqzh-34" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;+department_id (PK/FK)&lt;/div&gt;&lt;div&gt;+course_id (PK/FK)&lt;/div&gt;&lt;div&gt;+department_course_code&lt;/div&gt;&lt;div&gt;+is_owner&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-35" parent="MfBtu3gmphk7rpzaGqzh-34" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="&lt;div&gt;+id (PK)&lt;/div&gt;&lt;div&gt;+department_id (FK)&lt;/div&gt;&lt;div&gt;+course_id (FK)&lt;/div&gt;&lt;div&gt;+department_course_code&lt;/div&gt;&lt;div&gt;+is_owner&lt;/div&gt;" vertex="1">
           <mxGeometry height="70" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-36" edge="1" parent="1" source="MfBtu3gmphk7rpzaGqzh-33" style="fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="MfBtu3gmphk7rpzaGqzh-34" value="">
@@ -138,7 +138,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-44" parent="MfBtu3gmphk7rpzaGqzh-43" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id&lt;div&gt;&lt;div&gt;+code&lt;/div&gt;&lt;div&gt;+name&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-44" parent="MfBtu3gmphk7rpzaGqzh-43" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;&lt;div&gt;+code&lt;/div&gt;&lt;div&gt;+name&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" vertex="1">
           <mxGeometry height="55" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-49" parent="1" style="swimlane;childLayout=stackLayout;horizontal=1;startSize=50;horizontalStack=0;rounded=1;fontSize=14;fontStyle=0;strokeWidth=2;resizeParent=0;resizeLast=1;shadow=0;dashed=0;align=center;arcSize=4;whiteSpace=wrap;html=1;" value="&lt;font style=&quot;font-size: 11px;&quot;&gt;Course_Category_Assignment&lt;/font&gt;" vertex="1">
@@ -146,7 +146,7 @@
             <mxRectangle height="50" width="80" x="200" y="480" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="MfBtu3gmphk7rpzaGqzh-50" parent="MfBtu3gmphk7rpzaGqzh-49" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+course_id (PK/FK)&lt;div&gt;+category_id (PK/FK)&lt;/div&gt;" vertex="1">
+        <mxCell id="MfBtu3gmphk7rpzaGqzh-50" parent="MfBtu3gmphk7rpzaGqzh-49" style="align=left;strokeColor=none;fillColor=none;spacingLeft=4;spacingRight=4;fontSize=12;verticalAlign=top;resizable=0;rotatable=0;part=1;html=1;whiteSpace=wrap;" value="+id (PK)&lt;div&gt;+course_id (FK)&lt;/div&gt;&lt;div&gt;+category_id (FK)&lt;/div&gt;" vertex="1">
           <mxGeometry height="50" width="160" y="50" as="geometry" />
         </mxCell>
         <mxCell id="MfBtu3gmphk7rpzaGqzh-52" edge="1" parent="1" source="MfBtu3gmphk7rpzaGqzh-44" style="edgeStyle=entityRelationEdgeStyle;fontSize=12;html=1;endArrow=ERoneToMany;rounded=0;exitX=1;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="MfBtu3gmphk7rpzaGqzh-49" value="">

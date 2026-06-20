@@ -26,3 +26,13 @@ class CourseAttempt(BaseModel):
     semester: Annotated[int, Field(ge=1, le=20)]
     academic_year: Annotated[int, Field(gt=2000, le=CURRENT_YEAR.year)] # eg. 2025 = "2025-2026". So. academic year - academic_year+1
     attempt_number: Annotated[int, Field(gt=0)]
+
+class CourseAttemptUpdate(BaseModel):
+    course_id: Annotated[int, Field(gt=0)] | None = None
+    user_id: Annotated[int, Field(gt=0)] | None = None
+    status: Status | None = None
+    grade: Annotated[float, Field(ge=0, le=10)] | None = None
+    course_period: CoursePeriod | None = None
+    semester: Annotated[int, Field(ge=1, le=20)] | None = None
+    academic_year: Annotated[int, Field(gt=2000, le=CourseAttempt.CURRENT_YEAR.year)] | None = None
+    attempt_number: Annotated[int, Field(gt=0)] | None = None
