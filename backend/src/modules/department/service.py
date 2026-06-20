@@ -1,21 +1,28 @@
 from typing import Any
-from .schema import DepartmentCreate,DepartmentRead
+from .schema import DepartmentRead
 from ..university.service import universities
-departments: list[dict[str,Any]] = []
+from ..storage.memory import departments
 # TODO: - Rename flag to university_exists., - Make department name unique only within the same university., - Split duplicate department and missing university errors later.
 def create_department(department_data: dict[str,Any]) -> DepartmentRead | None:
-    flag:bool = False
-    for department in departments:
-        if((department.get("department_id") == department_data.get("department_id")) or department.get("name") == department_data.get("name")):
-            return None
-    for university in universities:
-        if(university.get("university_id") == department_data.get("university_id")):
-            flag = True
-    if(not flag):
+    if(not verify_university(department_data)):
+        return None
+    if(check_department(department_data)):
         return None
     departments.append(department_data)
     result = DepartmentRead(**department_data)
     return result
+
+def verify_university(department_data: dict[str,Any]) -> bool:
+    for university in universities:
+        if(university.get("university_id") == department_data["university_id"]):
+            return False
+    return True
+
+def check_department(department_data: dict[str,Any]) -> bool:
+    for department in departments:
+        if(department.get("department_id") == department_data.get("department_id") or (department.get("name") == department_data.get("name") and department.get("university_id") == department_data.get("university_id"))):
+            return True
+    return False
 
 def fetch_department(dep_id:int) -> DepartmentRead | None:
     """
