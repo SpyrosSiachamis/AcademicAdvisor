@@ -2,8 +2,8 @@
 
 from .schema import Course
 from typing import Any
+from ..storage.memory import courses
 
-courses: list[dict[str,Any]] = []
 
 def create_course(course: Course) -> dict[str,Any] | None:
     """Store a course unless its ID is already in use.

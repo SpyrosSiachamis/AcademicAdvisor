@@ -2,7 +2,7 @@ from .schema import UserCreate, UserRead
 from typing import Any, Annotated
 from .security import get_password_hash, verify_password, DUMMY_HASH
 from pydantic import Field
-users: list[dict[str, Any]] = []
+from ..storage.memory import users 
 
 def create_user(user: UserCreate) -> dict[str,Any] | None:
     """Store a user unless their ID is already in use.

@@ -13,6 +13,15 @@ services:
     command: python -m uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
     networks:
       - app-network
+  # database:
+  #   build:
+  #     context: ./database
+  #     dockerfile: Dockerfile
+  #   container_name: AcademicAdvisor-database
+  #   ports:
+  #     -'8080:8080'
+  #   volumes:
+  #     - ./database/memory
 
 networks:
   app-network:

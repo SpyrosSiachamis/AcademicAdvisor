@@ -1,8 +1,6 @@
 from .schema import University
 from typing import Any
-
-universities: list[dict[str, Any]] = []
-
+from ..storage.memory import universities
 def create_university(new_university: dict[str,Any]) -> dict[str, Any] | None:
     
     for university in universities:
