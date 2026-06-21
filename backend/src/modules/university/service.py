@@ -2,7 +2,6 @@ from .schema import UniversityUpdate
 from typing import Any
 from ..storage.memory import universities
 def create_university(new_university: dict[str,Any]) -> dict[str, Any] | None:
-    
     for university in universities:
         if(university.get("name") == new_university.get("name") or university.get("id") == new_university.get("id")):
             return None

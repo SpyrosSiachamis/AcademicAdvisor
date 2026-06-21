@@ -19,3 +19,6 @@ watchfiles==1.2.0
 websockets==16.0
 pydantic[email]
 pwdlib[argon2]
+pytest
+httpx
+httpx2

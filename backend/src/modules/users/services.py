@@ -1,7 +1,6 @@
 from .schema import UserCreate, UserRead, UserUpdate
-from typing import Any, Annotated
+from typing import Any
 from .security import get_password_hash, verify_password, DUMMY_HASH
-from pydantic import Field
 from ..storage.memory import users, departments
 
 def create_user(user: UserCreate) -> dict[str,Any] | None:
