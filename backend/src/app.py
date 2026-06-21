@@ -8,6 +8,8 @@ from .modules.course_categories.router import router as course_categories_router
 from .modules.course_category_assignments.router import router as course_category_assignments_router
 from .modules.course_ratings.router import router as course_ratings_router
 from .modules.course_tag_assignments.router import router as course_tag_assignments_router
+from .modules.course_prerequisites.router import router as course_prerequisites_router
+from .modules.course_suggested.router import router as course_suggested_router
 from .modules.department_courses.router import router as department_courses_router
 from .modules.tags.router import router as tags_router
 
@@ -26,5 +28,7 @@ app.include_router(course_categories_router)
 app.include_router(course_category_assignments_router)
 app.include_router(course_ratings_router)
 app.include_router(course_tag_assignments_router)
+app.include_router(course_prerequisites_router)
+app.include_router(course_suggested_router)
 app.include_router(department_courses_router)
 app.include_router(tags_router)

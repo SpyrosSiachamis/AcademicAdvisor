@@ -70,4 +70,4 @@ This diagram showcases the dependencies between each module. The database arrow 
 
 The ER diagram above shows the current planned database schema for the project. It supports the course catalog, course ratings, user course attempts, recommendation-related data, and separate university/department modeling.
 
-The prerequisites and suggested fields are temporary unnormalized fields. They will later be moved into dedicated relationship tables to avoid storing structured course relationships as raw text and to support proper eligibility and recommendation logic.
+Prerequisites and suggested course relationships are modeled through dedicated relationship tables instead of raw fields on the course record.

@@ -13,6 +13,8 @@ def setup_function():
     memory.departments.clear()
     memory.universities.clear()
     memory.course_attempts.clear()
+    memory.course_prerequisites.clear()
+    memory.course_suggested.clear()
 
 
 def seed_university():
@@ -28,9 +30,21 @@ def seed_course():
     seed_department()
     memory.courses.append({
         "id": 1,
+        "department_id": 1,
         "code": "CS-225",
         "name": "Computer Organization",
         "ects": 8
+    })
+
+
+def seed_two_courses():
+    seed_course()
+    memory.courses.append({
+        "id": 2,
+        "department_id": 1,
+        "code": "CS-240",
+        "name": "Data Structures",
+        "ects": 6
     })
 
 
@@ -105,3 +119,83 @@ def test_course_attempt_missing_user_or_course_rejected():
     })
 
     assert response.status_code in (404, 409)
+
+
+def test_course_prerequisite_created_with_existing_courses():
+    seed_two_courses()
+
+    response = client.post("/course-prerequisites/", json={
+        "id": 1,
+        "course_id": 2,
+        "prerequisite_course_id": 1
+    })
+
+    assert response.status_code == 200
+    assert response.json()["prerequisite"]["course_id"] == 2
+
+
+def test_course_prerequisite_duplicate_pair_rejected():
+    seed_two_courses()
+    memory.course_prerequisites.append({
+        "id": 1,
+        "course_id": 2,
+        "prerequisite_course_id": 1
+    })
+
+    response = client.post("/course-prerequisites/", json={
+        "id": 2,
+        "course_id": 2,
+        "prerequisite_course_id": 1
+    })
+
+    assert response.status_code == 409
+
+
+def test_course_prerequisite_missing_course_rejected():
+    response = client.post("/course-prerequisites/", json={
+        "id": 1,
+        "course_id": 2,
+        "prerequisite_course_id": 1
+    })
+
+    assert response.status_code == 409
+
+
+def test_course_suggested_created_with_existing_courses():
+    seed_two_courses()
+
+    response = client.post("/course-suggested/", json={
+        "id": 1,
+        "course_id": 1,
+        "suggested_course_id": 2
+    })
+
+    assert response.status_code == 200
+    assert response.json()["suggested"]["suggested_course_id"] == 2
+
+
+def test_course_suggested_duplicate_pair_rejected():
+    seed_two_courses()
+    memory.course_suggested.append({
+        "id": 1,
+        "course_id": 1,
+        "suggested_course_id": 2
+    })
+
+    response = client.post("/course-suggested/", json={
+        "id": 2,
+        "course_id": 1,
+        "suggested_course_id": 2
+    })
+
+    assert response.status_code == 409
+
+
+def test_course_suggested_missing_course_rejected():
+    response = client.post("/course-suggested/", json={
+        "id": 1,
+        "course_id": 1,
+        "suggested_course_id": 2
+    })
+
+    assert response.status_code == 409

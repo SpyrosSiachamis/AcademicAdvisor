@@ -29,14 +29,9 @@ production use.
 | `ects` | integer | Greater than `0` and less than `40` |
 | `code` | string | 2-20 characters; format `AA-000` or `AAA-000` |
 | `name` | string | 2-50 characters |
-| `prerequisites` | integer array | Each value is at least `1`; defaults to `[]` |
-| `suggested` | integer array | Each value is at least `1`; defaults to `[]` |
 | `contact_email` | string or null | Valid email address; defaults to `null` |
 | `difficulty_estimate` | number | Between `1` and `5`, inclusive |
 | `workload_estimate` | number | Between `1` and `5`, inclusive |
-
-`prerequisites` and `suggested` are temporary fields. They are planned to be
-replaced by normalized course relationship records.
 
 Example request body:
 
@@ -47,13 +42,27 @@ Example request body:
   "ects": 6,
   "code": "CS-101",
   "name": "Introduction to Computer Science",
-  "prerequisites": [],
-  "suggested": [2],
   "contact_email": "lecturer@example.edu",
   "difficulty_estimate": 2.5,
   "workload_estimate": 3
 }
 ```
+
+## Course Prerequisite Model
+
+| Field | Type | Constraints |
+| --- | --- | --- |
+| `id` | integer | Greater than `0`; must be unique |
+| `course_id` | integer | Greater than `0`; must reference an existing course |
+| `prerequisite_course_id` | integer | Greater than `0`; must reference an existing course |
+
+## Course Suggested Model
+
+| Field | Type | Constraints |
+| --- | --- | --- |
+| `id` | integer | Greater than `0`; must be unique |
+| `course_id` | integer | Greater than `0`; must reference an existing course |
+| `suggested_course_id` | integer | Greater than `0`; must reference an existing course |
 
 ## Endpoints
 
@@ -113,6 +122,26 @@ Deletes the course whose `code` matches `course_code`.
 - `200 OK`: The course was deleted.
 - `404 Not Found`: No course has the requested code.
 
+### Course prerequisites
+
+`POST /course-prerequisites/`
+`GET /course-prerequisites/`
+`GET /course-prerequisites/{prerequisite_id}`
+`PUT /course-prerequisites/{prerequisite_id}`
+`DELETE /course-prerequisites/{prerequisite_id}`
+
+Creates and manages normalized prerequisite relationships between courses.
+
+### Course suggested
+
+`POST /course-suggested/`
+`GET /course-suggested/`
+`GET /course-suggested/{suggested_id}`
+`PUT /course-suggested/{suggested_id}`
+`DELETE /course-suggested/{suggested_id}`
+
+Creates and manages normalized suggested-course relationships between courses.
+
 ## Example
 
 ```bash
@@ -124,11 +153,35 @@ curl -X POST http://localhost:8000/courses/add \
     "ects": 8,
     "code": "HY-100",
     "name": "Intro to CS",
-    "prerequisites": [],
-    "suggested": [],
     "contact_email": "hy100@example.com",
     "difficulty_estimate": 5,
     "workload_estimate": 5
+}'
+
+curl -X POST http://localhost:8000/courses/add \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "id": 2,
+    "department_id": 1,
+    "ects": 6,
+    "code": "HY-101",
+    "name": "Data Structures"
+}'
+
+curl -X POST http://localhost:8000/course-prerequisites/ \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "id": 1,
+    "course_id": 2,
+    "prerequisite_course_id": 1
+}'
+
+curl -X POST http://localhost:8000/course-suggested/ \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "id": 1,
+    "course_id": 1,
+    "suggested_course_id": 2
 }'
 
 curl http://localhost:8000/courses/
