@@ -8,3 +8,4 @@ __pycache__/
 .DS_Store
 settings.json
 docs/Database/.$ER.drawio.bkp
+CRUD_IMPLEMENTATION_README.md
