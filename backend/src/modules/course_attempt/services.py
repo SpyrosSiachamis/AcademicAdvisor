@@ -21,16 +21,20 @@ def get_attempt(attempt_id: int) -> dict[str, Any] | None:
     for attempt in course_attempts:
         if attempt.get("id") == attempt_id:
             return attempt
-    return None
+    return None 
 
 def update_attempt(attempt_id: int, attempt_update: CourseAttemptUpdate) -> dict[str, Any] | None:
     update_data = attempt_update.model_dump(mode="json", exclude_unset=True)
     existing_attempt = get_attempt(attempt_id)
     if existing_attempt is None:
         return None
+    
+    # This updates updated pairs by unpacking the same keys second
     candidate_attempt = {**existing_attempt, **update_data}
+
     if not get_user(candidate_attempt["user_id"]) or not get_course(candidate_attempt["course_id"]):
         return None
+    
     existing_attempt.update(update_data)
     return existing_attempt
 

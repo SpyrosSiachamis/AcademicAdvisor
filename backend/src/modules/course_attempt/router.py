@@ -8,9 +8,7 @@ async def create_course_attempt_route(attempt: CourseAttempt):
     return await create_course_attempt(attempt)
 
 @router.post('/add')
-async def create_course_attempt(
-    attempt: CourseAttempt
-):
+async def create_course_attempt(attempt: CourseAttempt):
     result = add_attempt(attempt)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate attempt or missing user/course")
