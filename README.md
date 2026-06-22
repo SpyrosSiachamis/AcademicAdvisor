@@ -181,3 +181,5 @@ Meaning:
 ```
 
 This idea came from trying to model the graph visually first, noticing that `OR` could be represented by multiple paths, but `AND` required a separate logical structure. The nested-list representation was chosen because it combines graph thinking, Boolean logic, and a simple data structure that can later be evaluated by the eligibility engine.
+
+The same nested AND/OR representation may be reused for suggested-course rules, but suggested rules do not block eligibility. They only influence recommendation scoring and explanations.
