@@ -1,62 +1,9 @@
-from fastapi.testclient import TestClient
-
-from src.app import app
 from src.modules.storage import memory
 
-
-client = TestClient(app)
-
+from .conftest import clear_memory, client, seed_department, seed_two_courses, seed_courses
 
 def setup_function():
-    memory.users.clear()
-    memory.courses.clear()
-    memory.departments.clear()
-    memory.universities.clear()
-    memory.course_attempts.clear()
-    memory.course_prerequisites.clear()
-    memory.course_suggested.clear()
-
-
-def seed_university():
-    memory.universities.append({"id": 1, "name": "University of Crete", "website_url": None})
-
-
-def seed_department():
-    seed_university()
-    memory.departments.append({"id": 1, "name": "Computer Science", "university_id": 1})
-
-
-def seed_course():
-    seed_department()
-    memory.courses.append({
-        "id": 1,
-        "department_id": 1,
-        "code": "CS-225",
-        "name": "Computer Organization",
-        "ects": 8
-    })
-
-
-def seed_two_courses():
-    seed_course()
-    memory.courses.append({
-        "id": 2,
-        "department_id": 1,
-        "code": "CS-240",
-        "name": "Data Structures",
-        "ects": 6
-    })
-
-
-def seed_user():
-    seed_department()
-    memory.users.append({
-        "id": 1,
-        "username": "spiros",
-        "email": "spiros@example.com",
-        "password_hash": "fakehash",
-        "department_id": 1
-    })
+    clear_memory()
 
 
 def test_department_missing_university_rejected():
@@ -199,3 +146,26 @@ def test_course_suggested_missing_course_rejected():
     })
 
     assert response.status_code == 409
+
+def test_seeded_courses():
+    seed_courses()
+    response = client.get("/courses")
+
+    assert response.status_code == 200
+
+    data = response.json()
+    assert isinstance(data, dict)
+    assert data["message"] == "Retrieved all courses"
+    assert "courses" in data
+
+    courses = data["courses"]
+    assert isinstance(courses, list)
+    assert len(courses) == 23
+    course_codes = {course["code"] for course in courses}
+    assert "CS-100" in course_codes
+    assert "CS-110" in course_codes
+    assert "CS-225" in course_codes
+    course_ids = {course["id"] for course in courses}
+    assert len(course_ids) == 23
+    assert min(course_ids) == 1
+    assert max(course_ids) == 23

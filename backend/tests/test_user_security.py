@@ -1,13 +1,10 @@
-from fastapi.testclient import TestClient
-from src.app import app
 from src.modules.storage import memory
 
-client = TestClient(app)
+from .conftest import clear_memory, client
 
 
 def setup_function():
-    memory.users.clear()
-    memory.departments.clear()
+    clear_memory()
 
 
 def test_create_user_does_not_return_password_or_password_hash():
