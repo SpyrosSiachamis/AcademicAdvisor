@@ -283,7 +283,72 @@ def seed_department_course_prerequisites():
             existing_pairs.add(pair)
             next_id += 1
 
+USER_COURSE_ATTEMPTS = {
+    "english_1_only": [
+        {
+            "id": 1,
+            "course_id": 3,
+            "user_id": 1,
+            "status": 2,
+            "grade": 8.0,
+            "course_period": 0,
+            "semester": 1,
+            "academic_year": 2026,
+            "attempt_number": 1
+        },
+    ],
+    "no_passed_courses": [],
+    "cs240_prerequisites": [
+        {
+            "id": 1,
+            "course_id": 1,
+            "user_id": 1,
+            "status": 2,
+            "grade": 8.0,
+            "course_period": 0,
+            "semester": 1,
+            "academic_year": 2026,
+            "attempt_number": 1
+        },
+        {
+            "id": 2,
+            "course_id": 8,
+            "user_id": 1,
+            "status": 2,
+            "grade": 8.0,
+            "course_period": 0,
+            "semester": 1,
+            "academic_year": 2026,
+            "attempt_number": 1
+        },
+    ],
+    "cs110_passed": [
+        {
+            "id": 1,
+            "course_id": 2,
+            "user_id": 1,
+            "status": 2,
+            "grade": 8.0,
+            "course_period": 0,
+            "semester": 1,
+            "academic_year": 2026,
+            "attempt_number": 1
+        },
+    ],
+}
 
 def seed_course_prerequisites():
     seed_courses()
     seed_department_course_prerequisites()
+
+def seed_user_passed_courses():
+    seed_course_prerequisites()
+    seed_user()
+
+
+def seed_user_course_attempts(attempts_key: str):
+    seed_course_prerequisites()
+    seed_user()
+
+    for attempt in USER_COURSE_ATTEMPTS[attempts_key]:
+        memory.course_attempts.append(attempt.copy())

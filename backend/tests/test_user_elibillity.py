@@ -1,7 +1,7 @@
 from src.modules.storage import memory
 
-from .conftest import clear_memory, client, seed_course_prerequisites, seed_courses
-
+from .conftest import clear_memory, client, seed_course_prerequisites, seed_user_course_attempts
+# from ..src.modules.eligibility.service import evaluate_prerequisite_rule
 
 def setup_function():
     clear_memory()
@@ -46,3 +46,19 @@ def test_seed_course_prerequisites_is_idempotent():
         for prerequisite in memory.course_prerequisites
     }
     assert len(pairs) == 26
+
+def test_user_course_attempts():
+    seed_user_course_attempts("no_passed_courses")
+    assert len(memory.course_attempts) == 0
+    print()
+    seed_user_course_attempts("cs240_prerequisites")
+    for attempt in memory.course_attempts:
+        print(f"User {attempt.get("user_id")} attempt: {attempt}")
+    assert len(memory.course_attempts) == 2
+    
+
+
+def test_prerequisite_eligibility():
+    seed_course_prerequisites()
+
+    # evaluate_prerequisite_rule()
