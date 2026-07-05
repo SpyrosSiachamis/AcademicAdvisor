@@ -45,6 +45,8 @@ def get_user(user_id: int) -> dict[str,Any] | None:
     Returns:
         The matching user record, or ``None`` when no match is found.
     """
+    if(user_id < 1):
+        return None
     for existing_user in users:
         if(existing_user.get("id") == user_id):
             return UserRead(**existing_user).model_dump()

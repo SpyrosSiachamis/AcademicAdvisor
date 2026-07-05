@@ -2,7 +2,7 @@ from src.modules.storage import memory
 
 from .conftest import clear_memory, client, seed_course_prerequisites, seed_user_course_attempts
 from src.modules.eligibility.service import evaluate_prerequisite_rule
-
+from src.modules.eligibility.router import get_course_eligibility
 def setup_function():
     clear_memory()
 
@@ -50,52 +50,69 @@ def test_seed_course_prerequisites_is_idempotent():
 def test_user_course_attempts():
     seed_user_course_attempts("no_passed_courses")
     assert len(memory.course_attempts) == 0
-    # print()
     seed_user_course_attempts("cs240_prerequisites")
-    # for attempt in memory.course_attempts:
-    #     print(f"User {attempt.get("user_id")} attempt: {attempt}")
     assert len(memory.course_attempts) == 2
     
 
 
 def test_prerequisite_eligibility_no_rules():
-    seed_course_prerequisites()
-
     result = evaluate_prerequisite_rule([], {3,2})
     assert(result["eligible"])
 
 
 def test_prerequisite_eligibility_englishII():
-    seed_course_prerequisites()
-
     result = evaluate_prerequisite_rule([[1]], {3,2,1})
     assert(result["eligible"])
+
 def test_prerequisite_no_eligibility_englishII():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1]], {3,2})
     assert(not result["eligible"])
 
 def test_prerequisite_cs100_or_cs150_rule_not_eligible():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1,8]], {3,2})
     assert not result["eligible"]
 
 def test_prerequisite_cs100_or_cs150_rule_eligible():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1,8]], {3,8})
     assert(result["eligible"])
 
 def test_prerequisite_cs100_and_cs150_rule_eligible():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1],[8]], {1,3,8})
     assert(result["eligible"])
 
 def test_prerequisite_cs100_and_cs150_rule_not_eligible():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1],[8]], {8,2})
     assert(not result["eligible"])
 
 def test_prerequisite_cs100_and_cs150_rule_not_eligible_no_passed_courses():
-    seed_course_prerequisites()
     result = evaluate_prerequisite_rule([[1],[8]], set())
     assert(not result["eligible"])
+
+def test_prerequisite_empty_or_group():
+    result = evaluate_prerequisite_rule([[]], set())
+    assert(not result["eligible"])
+
+def test_prerequisite_empty_and_groups():
+    result = evaluate_prerequisite_rule([[],[]], set())
+    assert(not result["eligible"])
+
+def test_user_eligibility_cs240_true():
+    seed_user_course_attempts("cs240_prerequisites")
+    result = get_course_eligibility(1,15)
+    assert result["eligible"]
+
+
+def test_user_eligibility_cs240_false():
+    seed_user_course_attempts("cs110_passed")
+    result = get_course_eligibility(1,15)
+    assert not result["eligible"]
+
+def test_user_eligibility_cs215_true():
+    seed_user_course_attempts("cs110_passed")
+    result = get_course_eligibility(1,12)
+    assert result["eligible"]
+
+def test_user_eligibility_cs215_false():
+    seed_user_course_attempts("cs240_prerequisites")
+    result = get_course_eligibility(1,12)
+    assert not result["eligible"]
