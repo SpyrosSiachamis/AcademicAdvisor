@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, HTTPException
 from .schema import Course, CourseUpdate
-from .service import create_course, get_all_courses, get_course_by_id, get_course_by_code, update_course, delete_course_from_id, delete_course_from_code
+from .service import create_course, get_all_courses, get_course_by_id, get_course_by_code, update_course, delete_course_from_id, delete_course_from_code, get_all_course_ids
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 
@@ -42,6 +42,18 @@ async def get_courses():
     return{
         "message": "Retrieved all courses",
         "courses": available_courses
+    }
+
+@router.get("/ids")
+def get_course_ids():
+    """Return every course id currently available.
+    Returns:
+        A response containing a confirmation message and the course id list.
+    """
+    available_courses = get_all_course_ids()
+    return{
+        "message": "Retrieved all courses",
+        "course_ids": available_courses
     }
 
 @router.get("/code/{course_code}")

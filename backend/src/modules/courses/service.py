@@ -33,6 +33,17 @@ def get_all_courses() -> list[dict[str,Any]]:
     """
     return courses
 
+def get_all_course_ids() -> list[int]:
+    """Return all stored course ids.
+
+    Returns:
+        A list of every course id available.
+    """
+    course_ids: list[int] = []
+    for course in courses:
+        course_ids.append(course["id"])
+    return course_ids
+
 def get_course_by_id(id: int) -> dict[str,Any] | None:
     """Find a stored course by its numeric identifier.
 
