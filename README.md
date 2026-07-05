@@ -59,8 +59,6 @@ A read path for pulling a student's real grades/course history directly from the
 
 This would let a student's completed/passed courses be imported automatically instead of entered by hand, feeding directly into the eligibility and recommendation engine.
 
-**Not yet built:** writing back to the portal, i.e. automating course declaration/registration submissions. This requires capturing the real declaration-submit request (from the browser's Network tab while manually declaring a course) to reverse-engineer its payload and auth requirements, the same way the read-side request was captured.
-
 ## Planned V1 Architecture
 
 ### Functional View
