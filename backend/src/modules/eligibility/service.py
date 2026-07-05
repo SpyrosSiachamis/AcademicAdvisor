@@ -10,7 +10,7 @@ def evaluate_prerequisite_rule(course_preq_rules: list[list[int]], passed_course
         for course in and_group:
             if(course in passed_courses):
                 eligible = True
-                break;
+                break
         if(not eligible):
             missing_groups.append(and_group)
     if(missing_groups):
