@@ -41,7 +41,6 @@ The first version focuses on the core academic planning engine:
 - Rule-based recommendation explanations
 - ECTS progress ring showing completed credits toward the overall degree target
 
-
 The V1 progress ring is an ECTS-only progress indicator and does not perform full degree-audit validation.
 
 Later versions will support multiple progress rings for requirement categories such as core courses and electives.
@@ -49,6 +48,18 @@ Later versions will support multiple progress rings for requirement categories s
 ## Post-V1 / Pre-Production Scope
 
 - Degree Constraints Module for validating program requirements, required courses, elective rules, ECTS requirements, category limits, thesis requirements, and graduation progress.
+
+## Future Expansion: University Portal Data Sync
+
+A read path for pulling a student's real grades/course history directly from the University of Crete's student portal has been prototyped, based on the `Options → University → Login → Scraper → Parser` pattern used by the open-source `unistudents-api` project. For UoC specifically, this means:
+
+- Logging in through `sso.uoc.gr` (Apereo CAS: fetch a one-time `execution` token, then POST credentials).
+- Fetching `eduportal.cict.uoc.gr`'s `GET /feign/student/grades/diploma` endpoint with the resulting session cookies.
+- Flattening the nested JPA/Hibernate JSON response into a flat `Course` model based on the project's predefined one.
+
+This would let a student's completed/passed courses be imported automatically instead of entered by hand, feeding directly into the eligibility and recommendation engine.
+
+**Not yet built:** writing back to the portal, i.e. automating course declaration/registration submissions. This requires capturing the real declaration-submit request (from the browser's Network tab while manually declaring a course) to reverse-engineer its payload and auth requirements, the same way the read-side request was captured.
 
 ## Planned V1 Architecture
 
