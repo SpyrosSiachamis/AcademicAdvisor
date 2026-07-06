@@ -2,9 +2,27 @@
 
 An academic decision-support system that recommends courses and academic paths based on completed courses, ratings, workload tolerance, interests, prerequisites, degree constraints, and career goals.
 
+## Table of Contents
+
+- [Current Status](#current-status)
+- [Current Scope](#current-scope)
+- [API Documentation](#api-documentation)
+- [Planned Stack for V1](#planned-stack-for-v1)
+- [V1 Scope](#v1-scope)
+- [Post-V1 / Pre-Production Scope](#post-v1--pre-production-scope)
+- [Future Expansion: University Portal Data Sync](#future-expansion-university-portal-data-sync)
+- [Planned V1 Architecture](#planned-v1-architecture)
+- [ER Diagram](#er-diagram)
+- [Prerequisite Rule Representation (V1)](#prerequisite-rule-representation-v1)
+- [Eligibility Engine Status](#eligibility-engine-status)
+
 ## Current Status
 
 Early-stage development. The project currently contains a containerized FastAPI backend used for experimenting with API structure, validation, and backend architecture before implementing the main recommendation system. Students already use AI manually to research courses and plan their academic path. AcademicAdvisor turns that into a structured, data-driven advising system.
+
+## Current Scope
+
+Eligibility evaluation currently supports a single department. The prerequisite adjacency list is built from all courses and prerequisite groups in storage, without filtering by department. Multi-department support (per-department adjacency lists, cross-department prerequisite resolution) is not yet implemented. Cross-department prerequisites may exist in real university data and are not handled.
 
 ## API Documentation
 
@@ -192,3 +210,16 @@ Meaning:
 This idea came from trying to model the graph visually first, noticing that `OR` could be represented by multiple paths, but `AND` required a separate logical structure. The nested-list representation was chosen because it combines graph thinking, Boolean logic, and a simple data structure that can later be evaluated by the eligibility engine.
 
 The same nested AND/OR representation may be reused for suggested-course rules, but suggested rules do not block eligibility. They only influence recommendation scoring and explanations.
+
+## Eligibility Engine Status
+
+The department-wide eligibility evaluation pipeline is implemented and tested:
+
+- `get_passed_courses(user_id)` in `graph/service.py` — returns the set of course IDs the user has passed
+- `build_department_prerequisite_adj_list()` in `graph/builder.py` — builds the full `{course_id: [[prereq_course_ids]]}` adjacency list by joining `Course_Prerequisite_Group` and `Course_Prerequisite` tables
+- `get_course_prerequisites(course_id)` in `graph/service.py` — returns the AND-of-OR prerequisite groups for a single course from the adjacency list
+- `get_all_course_eligibilities(user_id)` in `graph/service.py` — returns `{course_id: eligible}` for every course in the department
+- `evaluate_prerequisite_rule(course_preq_rules, passed_courses)` in `eligibility/service.py` — evaluates a single course's prerequisite rules against the user's passed courses, returning `{"eligible": bool, "missing_groups": [[course_ids]]}` when prerequisites are not met
+- The eligibility router (`eligibility/router.py`) wires these together: builds the adjacency list, looks up the course's prerequisite groups, fetches the user's passed courses, and delegates to `evaluate_prerequisite_rule`
+
+Covered by tests in `tests/test_user_elibillity.py`.
