@@ -51,7 +51,7 @@ def test_seed_course_prerequisites_is_idempotent():
     seed_course_prerequisites()
     seed_course_prerequisites()
     assert len(memory.course_prerequisites) == 26
-    assert len(memory.course_prerequisite_groups) == 26
+    assert len(memory.course_prerequisite_groups) == 16
 
 def test_user_course_attempts():
     seed_user_course_attempts("no_passed_courses")
