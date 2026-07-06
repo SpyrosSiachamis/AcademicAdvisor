@@ -135,3 +135,8 @@ def test_unable_to_take_cs240():
     seed_user_course_attempts("no_passed_courses")
     result = get_course_eligibility(1,12)
     assert not result["eligible"]
+
+def test_unable_to_take_cs360():
+    seed_user_course_attempts("no_passed_courses")
+    result = get_course_eligibility(1,22)
+    assert not result["eligible"]

@@ -13,7 +13,6 @@ def get_course_eligibility(user_id: int, course_id: int):
 
     adj_list = build_department_prerequisite_adj_list()
     course_preq_rules = adj_list.get(course_id, [])
-
     passed_courses = get_passed_courses(user_id)
 
     return evaluate_prerequisite_rule(course_preq_rules, passed_courses)
