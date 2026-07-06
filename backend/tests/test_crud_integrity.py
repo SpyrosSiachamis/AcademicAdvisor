@@ -70,39 +70,43 @@ def test_course_attempt_missing_user_or_course_rejected():
 
 def test_course_prerequisite_created_with_existing_courses():
     seed_two_courses()
+    memory.course_prerequisite_groups.append({"id": 1, "course_id": 2})
 
     response = client.post("/course-prerequisites/", json={
         "id": 1,
-        "course_id": 2,
-        "prerequisite_course_id": 1
+        "prerequisite_course_id": 1,
+        "group_id": 1
     })
 
     assert response.status_code == 200
-    assert response.json()["prerequisite"]["course_id"] == 2
+    assert response.json()["prerequisite"]["group_id"] == 1
 
 
 def test_course_prerequisite_duplicate_pair_rejected():
     seed_two_courses()
+    memory.course_prerequisite_groups.append({"id": 1, "course_id": 2})
     memory.course_prerequisites.append({
         "id": 1,
-        "course_id": 2,
-        "prerequisite_course_id": 1
+        "prerequisite_course_id": 1,
+        "group_id": 1
     })
 
     response = client.post("/course-prerequisites/", json={
         "id": 2,
-        "course_id": 2,
-        "prerequisite_course_id": 1
+        "prerequisite_course_id": 1,
+        "group_id": 1
     })
 
     assert response.status_code == 409
 
 
-def test_course_prerequisite_missing_course_rejected():
+def test_course_prerequisite_missing_group_rejected():
+    seed_two_courses()
+
     response = client.post("/course-prerequisites/", json={
         "id": 1,
-        "course_id": 2,
-        "prerequisite_course_id": 1
+        "prerequisite_course_id": 1,
+        "group_id": 999
     })
 
     assert response.status_code == 409

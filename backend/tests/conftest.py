@@ -30,6 +30,7 @@ def clear_memory():
     memory.departments.clear()
     memory.universities.clear()
     memory.course_attempts.clear()
+    memory.course_prerequisite_groups.clear()
     memory.course_prerequisites.clear()
     memory.course_suggested.clear()
 
@@ -250,15 +251,11 @@ def seed_courses():
 def seed_department_course_prerequisites():
     courses_by_code = {course["code"]: course for course in memory.courses}
 
-    existing_pairs = {
-        (prerequisite["course_id"], prerequisite["prerequisite_course_id"])
-        for prerequisite in memory.course_prerequisites
-    }
+    existing_group_ids = {group["id"] for group in memory.course_prerequisite_groups}
+    existing_prereq_ids = {prereq["id"] for prereq in memory.course_prerequisites}
 
-    next_id = max(
-        (prerequisite["id"] for prerequisite in memory.course_prerequisites),
-        default=0,
-    ) + 1
+    next_group_id = max(existing_group_ids, default=0) + 1
+    next_prereq_id = max(existing_prereq_ids, default=0) + 1
 
     for course_code, prerequisite_codes in DEPARTMENT_COURSE_PREREQUISITES.items():
         course = courses_by_code.get(course_code)
@@ -270,18 +267,30 @@ def seed_department_course_prerequisites():
             if prerequisite_course is None:
                 continue
 
-            pair = (course["id"], prerequisite_course["id"])
-            if pair in existing_pairs:
+            already_exists = any(
+                group["course_id"] == course["id"]
+                and any(
+                    prereq["group_id"] == group["id"]
+                    and prereq["prerequisite_course_id"] == prerequisite_course["id"]
+                    for prereq in memory.course_prerequisites
+                )
+                for group in memory.course_prerequisite_groups
+            )
+            if already_exists:
                 continue
 
-            prerequisite = {
-                "id": next_id,
-                "course_id": course["id"],
+            group = {"id": next_group_id, "course_id": course["id"]}
+            memory.course_prerequisite_groups.append(group)
+
+            prereq = {
+                "id": next_prereq_id,
                 "prerequisite_course_id": prerequisite_course["id"],
+                "group_id": next_group_id,
             }
-            memory.course_prerequisites.append(prerequisite)
-            existing_pairs.add(pair)
-            next_id += 1
+            memory.course_prerequisites.append(prereq)
+
+            next_group_id += 1
+            next_prereq_id += 1
 
 USER_COURSE_ATTEMPTS = {
     "english_1_only": [

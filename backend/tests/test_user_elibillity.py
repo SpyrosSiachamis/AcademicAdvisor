@@ -19,20 +19,28 @@ def test_english_ii_has_english_i_as_prerequisite():
     prerequisites = response.json()["prerequisites"]
     assert len(prerequisites) == 26
 
-    english_2_prerequisite = next(
-        prerequisite for prerequisite in prerequisites
-        if prerequisite["course_id"] == 4
-    )
-    preq_id = english_2_prerequisite["prerequisite_course_id"]
-    course_id = english_2_prerequisite["course_id"]
+    groups_for_english_2 = [
+        group for group in memory.course_prerequisite_groups
+        if group["course_id"] == 4
+    ]
+    assert len(groups_for_english_2) == 1
+    group_id = groups_for_english_2[0]["id"]
+
+    english_2_prereqs = [
+        prereq for prereq in prerequisites
+        if prereq["group_id"] == group_id
+    ]
+    assert len(english_2_prereqs) == 1
+    preq_id = english_2_prereqs[0]["prerequisite_course_id"]
+
     course_ids = {course["id"] for course in courses}
     english_1 = english_2 = None
     for course in courses:
         if(course["id"] == preq_id):
             english_1 = course
-        elif(course["id"] == course_id):
+        elif(course["id"] == 4):
             english_2 = course
-    assert (course_id in course_ids) and (preq_id in course_ids)
+    assert (4 in course_ids) and (preq_id in course_ids)
     assert english_1 is not None
     assert english_2 is not None
     assert english_1["name"] == "English I"
@@ -43,18 +51,14 @@ def test_seed_course_prerequisites_is_idempotent():
     seed_course_prerequisites()
     seed_course_prerequisites()
     assert len(memory.course_prerequisites) == 26
-    pairs = {
-        (prerequisite["course_id"], prerequisite["prerequisite_course_id"])
-        for prerequisite in memory.course_prerequisites
-    }
-    assert len(pairs) == 26
+    assert len(memory.course_prerequisite_groups) == 26
 
 def test_user_course_attempts():
     seed_user_course_attempts("no_passed_courses")
     assert len(memory.course_attempts) == 0
     seed_user_course_attempts("cs240_prerequisites")
     assert len(memory.course_attempts) == 2
-    
+
 
 
 def test_prerequisite_eligibility_no_rules():
@@ -118,11 +122,6 @@ def test_user_eligibility_cs215_false():
     seed_user_course_attempts("cs240_prerequisites")
     result = get_course_eligibility(1,12)
     assert not result["eligible"]
-
-# def test_adj_lists():
-#     seed_user_course_attempts("cs240_prerequisites")
-#     print()
-#     print(build_department_prerequisite_adj_list())
 
 def test_get_passed_courses():
     seed_user_course_attempts("cs240_prerequisites")
