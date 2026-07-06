@@ -2,7 +2,7 @@ from fastapi.testclient import TestClient
 
 from src.app import app
 from src.modules.storage import memory
-
+from src.modules.course_attempt.schema import Status
 
 client = TestClient(app)
 
@@ -289,7 +289,7 @@ USER_COURSE_ATTEMPTS = {
             "id": 1,
             "course_id": 3,
             "user_id": 1,
-            "status": 2,
+            "status": Status.passed.value,
             "grade": 8.0,
             "course_period": 0,
             "semester": 1,
@@ -303,7 +303,7 @@ USER_COURSE_ATTEMPTS = {
             "id": 1,
             "course_id": 1,
             "user_id": 1,
-            "status": 2,
+            "status": Status.passed.value,
             "grade": 8.0,
             "course_period": 0,
             "semester": 1,
@@ -314,7 +314,7 @@ USER_COURSE_ATTEMPTS = {
             "id": 2,
             "course_id": 8,
             "user_id": 1,
-            "status": 2,
+            "status": Status.passed.value,
             "grade": 8.0,
             "course_period": 0,
             "semester": 1,
@@ -327,7 +327,7 @@ USER_COURSE_ATTEMPTS = {
             "id": 1,
             "course_id": 2,
             "user_id": 1,
-            "status": 2,
+            "status": Status.passed.value,
             "grade": 8.0,
             "course_period": 0,
             "semester": 1,
