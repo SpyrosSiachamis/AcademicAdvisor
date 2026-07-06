@@ -17,4 +17,3 @@ def build_department_prerequisite_adj_list() -> dict[int, list[int]]:
             continue
         adj_list[course_id].append(prerequisite_course_id)
     return dict(adj_list)
-

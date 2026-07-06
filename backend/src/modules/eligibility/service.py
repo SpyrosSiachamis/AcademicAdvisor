@@ -21,4 +21,3 @@ def evaluate_prerequisite_rule(course_preq_rules: list[list[int]], passed_course
     return {
         "eligible": True
     }
-    

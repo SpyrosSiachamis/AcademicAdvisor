@@ -4,7 +4,7 @@ from .conftest import clear_memory, client, seed_course_prerequisites, seed_user
 from src.modules.eligibility.service import evaluate_prerequisite_rule
 from src.modules.eligibility.router import get_course_eligibility
 from src.modules.graph.builder import build_department_prerequisite_adj_list
-from src.modules.graph.service import get_passed_courses
+from src.modules.graph.service import get_passed_courses,get_course_prerequisites
 def setup_function():
     clear_memory()
 
@@ -136,3 +136,8 @@ def test_unable_to_take_cs240():
     seed_user_course_attempts("no_passed_courses")
     result = get_course_eligibility(1,12)
     assert not result["eligible"]
+
+def test_course_preqs():
+    seed_user_course_attempts("no_passed_courses")
+    print()
+    print(get_course_prerequisites(22))
