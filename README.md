@@ -83,7 +83,7 @@ Prerequisites and suggested course relationships are modeled through dedicated r
 
 ## Prerequisite Rule Representation (V1)
 
-The Academic Advisor recommendation and eligibility engine represents prerequisite rules as a nested collection, conceptually `list[list[str]]`.
+The Academic Advisor recommendation and eligibility engine represents prerequisite rules as a nested collection, conceptually `list[list[int]]` (where each `int` is a course ID). Course codes are used below for readability.
 
 The outer collection represents `AND` groups. Each inner collection represents an `OR` group. A prerequisite rule is satisfied when at least one course from every inner group has been completed.
 
