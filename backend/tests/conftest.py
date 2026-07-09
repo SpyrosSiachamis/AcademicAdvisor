@@ -336,6 +336,20 @@ USER_COURSE_ATTEMPTS = {
             "attempt_number": 1
         },
     ],
+    "all_courses": [
+        {
+            "id": course_id,
+            "course_id": course_id,
+            "user_id": 1,
+            "status": Status.passed.value,
+            "grade": 8.0,
+            "course_period": 0,
+            "semester": 1,
+            "academic_year": 2026,
+            "attempt_number": 1
+        }
+        for course_id in range(1, 24)
+    ]
 }
 
 def seed_course_prerequisites():
