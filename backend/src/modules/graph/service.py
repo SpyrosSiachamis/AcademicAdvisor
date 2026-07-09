@@ -9,8 +9,10 @@ def get_passed_courses(user_id: int) -> set[int]:
             passed_courses.add(attempt['course_id'])
     return passed_courses
 
-def get_course_prerequisites(course_id: int) -> list[list[int]]:
+def get_course_prerequisites(course_id: int) -> list[list[int]] | None:
     course_prerequisites: dict[int, list[list[int]]] = build_department_prerequisite_adj_list()
+    if course_id not in course_prerequisites:
+        return None
     return course_prerequisites[course_id]
 
 def get_all_course_eligibilities(user_id: int) -> dict[int,bool]:
