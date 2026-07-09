@@ -1,9 +1,10 @@
 from src.modules.storage import memory
-
 from .conftest import clear_memory, client, seed_course_prerequisites, seed_user_course_attempts
 from src.modules.eligibility.service import evaluate_prerequisite_rule
 from src.modules.eligibility.router import get_course_eligibility
 from src.modules.graph.service import get_passed_courses, get_all_course_eligibilities, get_course_prerequisites
+import pytest
+
 def setup_function():
     clear_memory()
 
@@ -147,13 +148,23 @@ def test_all_course_eligibilities_no_passed():
     truths = []
     for course in memory.courses:
         course_id: int = course['id']
-        course_code: str = course['code']
-        print(f"Course: {course_code}\nEligibility: {results[course_id]}")
-        if results[course_id] == True:
+        if results[course_id]['eligible'] == True:
             truths.append(results[course_id])
     assert(len(truths) == 9)
 
 def test_get_course_prerequisites_unknown_id():
     seed_user_course_attempts("no_passed_courses")
-    result = get_course_prerequisites(24)
-    assert(result) == None
+    with pytest.raises(ValueError):
+        get_course_prerequisites(24)
+    results = get_course_prerequisites(23)
+
+def test_all_course_eligibilities():
+    seed_user_course_attempts("all_courses")
+    results = get_all_course_eligibilities(1)
+    truths = []
+    for course in memory.courses:
+        course_id: int = course['id']
+        if results[course_id]['eligible'] == True:
+            truths.append(results[course_id]["eligible"])
+    assert(len(truths) == 23)
+    assert all(v["eligible"] for v in results.values())
