@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from .schema import CoursePrerequisiteGroup, CoursePrerequisiteGroupUpdate
 from .service import create_course_prerequisite_group, delete_course_prerequisite_group, get_course_prerequisite_group, get_course_prerequisite_groups, update_course_prerequisite_group
+from ..auth.dependencies import get_current_user
 
 
 router = APIRouter(prefix="/course-prerequisite-groups", tags=["course prerequisite groups"])
 
 
 @router.post("/")
-async def add_course_prerequisite_group(group: CoursePrerequisiteGroup):
+async def add_course_prerequisite_group(group: CoursePrerequisiteGroup, current_user: dict = Depends(get_current_user)):
     result = create_course_prerequisite_group(group)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate group or missing course")
@@ -29,7 +30,7 @@ async def get_course_prerequisite_group_by_id(group_id: int):
 
 
 @router.put("/{group_id}")
-async def update_course_prerequisite_group_by_id(group_id: int, group_update: CoursePrerequisiteGroupUpdate):
+async def update_course_prerequisite_group_by_id(group_id: int, group_update: CoursePrerequisiteGroupUpdate, current_user: dict = Depends(get_current_user)):
     result = update_course_prerequisite_group(group_id, group_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Group not found or missing course")
@@ -37,7 +38,7 @@ async def update_course_prerequisite_group_by_id(group_id: int, group_update: Co
 
 
 @router.delete("/{group_id}")
-async def delete_course_prerequisite_group_by_id(group_id: int):
+async def delete_course_prerequisite_group_by_id(group_id: int, current_user: dict = Depends(get_current_user)):
     result = delete_course_prerequisite_group(group_id)
     if not result:
         raise HTTPException(status_code=404, detail="Course prerequisite group not found")

@@ -1,17 +1,18 @@
 """HTTP routes for creating and retrieving courses."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from .schema import Course, CourseUpdate
 from .service import create_course, get_all_courses, get_course_by_id, get_course_by_code, update_course, delete_course_from_id, delete_course_from_code, get_all_course_ids
+from ..auth.dependencies import get_current_user
 
 router = APIRouter(prefix="/courses", tags=["courses"])
 
 @router.post('/')
-async def create_course_route(course: Course):
+async def create_course_route(course: Course, current_user: dict = Depends(get_current_user)):
     return await add_course(course)
 
 @router.post('/add')
-async def add_course(course: Course):
+async def add_course(course: Course, current_user: dict = Depends(get_current_user)):
     """Create a course from the validated request body.
 
     Args:
@@ -100,7 +101,7 @@ async def get_course_with_id(course_id: int):
     }
 
 @router.put("/{course_id}")
-async def update_course_by_id(course_id: int, course_update: CourseUpdate):
+async def update_course_by_id(course_id: int, course_update: CourseUpdate, current_user: dict = Depends(get_current_user)):
     result = update_course(course_id, course_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Course not found, duplicate code, or missing department")
@@ -110,7 +111,7 @@ async def update_course_by_id(course_id: int, course_update: CourseUpdate):
     }
 
 @router.delete("/code/{course_code}")
-async def delete_course_by_code(course_code: str):
+async def delete_course_by_code(course_code: str, current_user: dict = Depends(get_current_user)):
     """Delete a course by its course code.
 
     Args:
@@ -132,7 +133,7 @@ async def delete_course_by_code(course_code: str):
 
 
 @router.delete("/{course_id}")
-async def delete_course_by_id(course_id: int):
+async def delete_course_by_id(course_id: int, current_user: dict = Depends(get_current_user)):
     """Delete a course by its numeric identifier.
 
     Args:

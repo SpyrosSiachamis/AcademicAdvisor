@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from .schema import Tag, TagUpdate
 from .service import create_tag, delete_tag, get_tag, get_tags, update_tag
+from ..auth.dependencies import get_current_user
 
 
 router = APIRouter(prefix="/tags", tags=["tags"])
 
 
 @router.post("/")
-async def add_tag(tag: Tag):
+async def add_tag(tag: Tag, current_user: dict = Depends(get_current_user)):
     result = create_tag(tag)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate tag")
@@ -29,7 +30,7 @@ async def get_tag_by_id(tag_id: int):
 
 
 @router.put("/{tag_id}")
-async def update_tag_by_id(tag_id: int, tag_update: TagUpdate):
+async def update_tag_by_id(tag_id: int, tag_update: TagUpdate, current_user: dict = Depends(get_current_user)):
     result = update_tag(tag_id, tag_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Tag not found or duplicate name")
@@ -37,7 +38,7 @@ async def update_tag_by_id(tag_id: int, tag_update: TagUpdate):
 
 
 @router.delete("/{tag_id}")
-async def delete_tag_by_id(tag_id: int):
+async def delete_tag_by_id(tag_id: int, current_user: dict = Depends(get_current_user)):
     result = delete_tag(tag_id)
     if not result:
         raise HTTPException(status_code=404, detail="Tag not found")

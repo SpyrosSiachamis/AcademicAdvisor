@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from .schema import CourseCategory, CourseCategoryUpdate
 from .service import create_course_category, delete_course_category, get_course_categories, get_course_category, update_course_category
+from ..auth.dependencies import get_current_user
 
 
 router = APIRouter(prefix="/course-categories", tags=["course categories"])
 
 
 @router.post("/")
-async def add_course_category(category: CourseCategory):
+async def add_course_category(category: CourseCategory, current_user: dict = Depends(get_current_user)):
     result = create_course_category(category)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate course category")
@@ -29,7 +30,7 @@ async def get_course_category_by_id(category_id: int):
 
 
 @router.put("/{category_id}")
-async def update_course_category_by_id(category_id: int, category_update: CourseCategoryUpdate):
+async def update_course_category_by_id(category_id: int, category_update: CourseCategoryUpdate, current_user: dict = Depends(get_current_user)):
     result = update_course_category(category_id, category_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Course category not found or duplicate value")
@@ -37,7 +38,7 @@ async def update_course_category_by_id(category_id: int, category_update: Course
 
 
 @router.delete("/{category_id}")
-async def delete_course_category_by_id(category_id: int):
+async def delete_course_category_by_id(category_id: int, current_user: dict = Depends(get_current_user)):
     result = delete_course_category(category_id)
     if not result:
         raise HTTPException(status_code=404, detail="Course category not found")

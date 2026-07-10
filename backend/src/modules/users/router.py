@@ -33,7 +33,7 @@ async def list_users(current_user: dict =Depends(get_current_user)):
     }
 
 @router.get('/{user_id}')
-async def get_user_by_id(user_id: int):
+async def get_user_by_id(user_id: int, current_user: dict = Depends(get_current_user)):
     try:
         result = get_user(user_id)
     except UserNotFoundError as e:
@@ -61,7 +61,9 @@ async def update_user_by_id(user_id: int, user_update: UserUpdate, current_user:
     }
 
 @router.delete('/{user_id}')
-async def delete_user_by_id(user_id: int):
+async def delete_user_by_id(user_id: int, current_user: dict = Depends(get_current_user)):
+    if current_user['id'] != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to delete this user")
     try:
         delete_user(user_id)
     except UserDeleteError as e:

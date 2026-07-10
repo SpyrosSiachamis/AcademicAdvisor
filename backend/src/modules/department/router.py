@@ -1,14 +1,11 @@
-from fastapi import APIRouter,HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from .schema import DepartmentCreate, DepartmentRead, DepartmentUpdate
 from .service import create_department, get_departments, fetch_department, update_department, delete_department
+from ..auth.dependencies import get_current_user
 router = APIRouter(prefix='/department', tags=['department'])
 
 @router.post('/')
-async def create_department_route(department: DepartmentCreate):
-    return await add_department(department)
-
-@router.post('/add')
-async def add_department(department: DepartmentCreate):
+async def add_department(department: DepartmentCreate, current_user: dict = Depends(get_current_user)):
     department_data = department.model_dump(mode="json")
     result: DepartmentRead | None = create_department(department_data)
     if (result is None):
@@ -36,7 +33,7 @@ async def get_department(id: int):
     }
 
 @router.put('/{id}')
-async def update_department_by_id(id: int, department_update: DepartmentUpdate):
+async def update_department_by_id(id: int, department_update: DepartmentUpdate, current_user: dict = Depends(get_current_user)):
     result: DepartmentRead | None = update_department(id, department_update)
     if(result is None):
         raise HTTPException(status_code=404, detail=f"Department with id: {id} not found, duplicate department, or missing university")
@@ -46,7 +43,7 @@ async def update_department_by_id(id: int, department_update: DepartmentUpdate):
     }
 
 @router.delete('/{id}')
-async def remove_department(id: int):
+async def remove_department(id: int, current_user: dict = Depends(get_current_user)):
     result: bool = delete_department(id)
     if(not result):
         raise HTTPException(status_code=404, detail=f"Department with id: {id} not found")

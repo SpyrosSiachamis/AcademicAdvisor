@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from .schema import DepartmentCourse, DepartmentCourseUpdate
 from .service import create_department_course, delete_department_course, get_department_course, get_department_courses, update_department_course
+from ..auth.dependencies import get_current_user
 
 
 router = APIRouter(prefix="/department-courses", tags=["department courses"])
 
 
 @router.post("/")
-async def add_department_course(department_course: DepartmentCourse):
+async def add_department_course(department_course: DepartmentCourse, current_user: dict = Depends(get_current_user)):
     result = create_department_course(department_course)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate department course or missing department/course")
@@ -29,7 +30,7 @@ async def get_department_course_by_id(department_course_id: int):
 
 
 @router.put("/{department_course_id}")
-async def update_department_course_by_id(department_course_id: int, department_course_update: DepartmentCourseUpdate):
+async def update_department_course_by_id(department_course_id: int, department_course_update: DepartmentCourseUpdate, current_user: dict = Depends(get_current_user)):
     result = update_department_course(department_course_id, department_course_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Department course not found, duplicate pair, or missing department/course")
@@ -37,7 +38,7 @@ async def update_department_course_by_id(department_course_id: int, department_c
 
 
 @router.delete("/{department_course_id}")
-async def delete_department_course_by_id(department_course_id: int):
+async def delete_department_course_by_id(department_course_id: int, current_user: dict = Depends(get_current_user)):
     result = delete_department_course(department_course_id)
     if not result:
         raise HTTPException(status_code=404, detail="Department course not found")

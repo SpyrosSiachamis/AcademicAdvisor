@@ -1,14 +1,15 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 
 from .schema import CourseRating, CourseRatingUpdate
 from .service import create_course_rating, delete_course_rating, get_course_rating, get_course_ratings, update_course_rating
+from ..auth.dependencies import get_current_user
 
 
 router = APIRouter(prefix="/course-ratings", tags=["course ratings"])
 
 
 @router.post("/")
-async def add_course_rating(course_rating: CourseRating):
+async def add_course_rating(course_rating: CourseRating, current_user: dict = Depends(get_current_user)):
     result = create_course_rating(course_rating)
     if result is None:
         raise HTTPException(status_code=409, detail="Duplicate course rating or missing user/course")
@@ -29,7 +30,7 @@ async def get_course_rating_by_id(course_rating_id: int):
 
 
 @router.put("/{course_rating_id}")
-async def update_course_rating_by_id(course_rating_id: int, course_rating_update: CourseRatingUpdate):
+async def update_course_rating_by_id(course_rating_id: int, course_rating_update: CourseRatingUpdate, current_user: dict = Depends(get_current_user)):
     result = update_course_rating(course_rating_id, course_rating_update)
     if result is None:
         raise HTTPException(status_code=404, detail="Course rating not found, duplicate pair, or missing user/course")
@@ -37,7 +38,7 @@ async def update_course_rating_by_id(course_rating_id: int, course_rating_update
 
 
 @router.delete("/{course_rating_id}")
-async def delete_course_rating_by_id(course_rating_id: int):
+async def delete_course_rating_by_id(course_rating_id: int, current_user: dict = Depends(get_current_user)):
     result = delete_course_rating(course_rating_id)
     if not result:
         raise HTTPException(status_code=404, detail="Course rating not found")
