@@ -76,7 +76,7 @@ def update_user(user_id: int, user_update: UserUpdate) -> dict[str, Any]:
         DuplicateUserError: When the new username or email is already in use.
     """
     update_data = user_update.model_dump(mode="json", exclude_unset=True)
-    existing_user = get_user_record(user_id)
+    existing_user = get_user(user_id)
     if existing_user is None:
         raise UserNotFoundError(f"User with id {user_id} does not exist")
     if "department_id" in update_data and not department_exists(update_data["department_id"]):
@@ -109,19 +109,13 @@ def delete_user(user_id: int) -> None:
             return
     raise UserDeleteError(f"User with id {user_id} not found")
 
-def get_user_record(user_id: int) -> dict[str, Any]:
-    for user in users:
-        if user.get("id") == user_id:
-            return user
-    raise UserNotFoundError(f"User with id: {user_id} not found")
-
 def department_exists(department_id: int) -> bool:
     for department in departments:
         if department.get("id") == department_id:
             return True
     return False
 
-def get_user_record_by_name(username: str) -> dict[str,Any]:
+def get_user_by_name(username: str) -> dict[str,Any]:
     for user in users:
         if user["username"] == username:
             return user

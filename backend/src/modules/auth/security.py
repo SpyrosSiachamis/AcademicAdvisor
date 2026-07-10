@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, cast
 from pwdlib import PasswordHash
 from pydantic import Field
 from fastapi.security import OAuth2PasswordBearer
@@ -8,11 +8,14 @@ from jose import jwt
 import os
 from .schema import Token
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
+_secret_key = os.getenv("SECRET_KEY")
+_algorithm = os.getenv("ALGORITHM")
 
-if not SECRET_KEY or not ALGORITHM:
+if not _secret_key or not _algorithm:
     raise RuntimeError("SECRET_KEY and ALGORITHM must be set in the environment")
+
+SECRET_KEY = cast(str, _secret_key)
+ALGORITHM = cast(str, _algorithm)
 
 password_hash = PasswordHash.recommended()
 DUMMY_HASH= password_hash.hash("dummypassword")

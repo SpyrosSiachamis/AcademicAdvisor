@@ -10,7 +10,7 @@ def authenticate_user(username: str, password: str) -> dict[str, Any]:
     """Verify a user's credentials.
 
     Args:
-        user_id: Unique identifier of the user to authenticate.
+        username: Username of the user to identify
         password: Plain-text password to verify.
 
     Returns:
