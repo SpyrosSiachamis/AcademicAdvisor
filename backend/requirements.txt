@@ -22,3 +22,7 @@ pwdlib[argon2]
 pytest
 httpx
 httpx2
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
+pytest-sugar

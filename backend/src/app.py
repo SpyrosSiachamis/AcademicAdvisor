@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from .modules.courses.router import router as courses_router
 from .modules.users.router import router as users_router
 from .modules.course_attempt.router import router as attempt_router
@@ -14,7 +14,7 @@ from .modules.course_suggested.router import router as course_suggested_router
 from .modules.department_courses.router import router as department_courses_router
 from .modules.tags.router import router as tags_router
 from .modules.eligibility.router import router as eligibility_router
-
+from .modules.auth.dependencies import router as auth_router
 app = FastAPI()
 
 @app.get("/")
@@ -36,3 +36,4 @@ app.include_router(course_suggested_router)
 app.include_router(department_courses_router)
 app.include_router(tags_router)
 app.include_router(eligibility_router)
+app.include_router(auth_router)
