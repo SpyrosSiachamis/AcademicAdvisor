@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from starlette import status
 from .schema import UserCreate, UserUpdate
 from .services import create_user, get_users, get_user, update_user, delete_user
-# from ..auth.dependencies import get_current_user
+from ..auth.dependencies import get_current_user
 from typing import Annotated
 from .exceptions import (
     DuplicateUserError,
@@ -26,15 +26,11 @@ async def add_user(user: UserCreate):
     }
 
 @router.get('/')
-async def list_users():
+async def list_users(current_user: dict =Depends(get_current_user)):
     return {
         "message": "Retrieved all users",
         "users": get_users()
     }
-
-# @router.get('/current-user')
-# async def get_cur_user(user: Annotated[str,Depends(get_current_user)]):
-#     return user
 
 @router.get('/{user_id}')
 async def get_user_by_id(user_id: int):
@@ -48,7 +44,9 @@ async def get_user_by_id(user_id: int):
     }
 
 @router.put('/{user_id}')
-async def update_user_by_id(user_id: int, user_update: UserUpdate):
+async def update_user_by_id(user_id: int, user_update: UserUpdate, current_user: dict=Depends(get_current_user)):
+    if current_user['id'] != user_id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not authorized to update this user")
     try:
         result = update_user(user_id, user_update)
     except UserNotFoundError as e:

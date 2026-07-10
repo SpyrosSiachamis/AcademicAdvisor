@@ -20,7 +20,7 @@ ALGORITHM = cast(str, _algorithm)
 password_hash = PasswordHash.recommended()
 DUMMY_HASH= password_hash.hash("dummypassword")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/token")
 def get_password_hash(password: Annotated[str, Field(min_length=5)]):
     return password_hash.hash(password)
 
