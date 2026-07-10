@@ -1,5 +1,5 @@
 from fastapi.testclient import TestClient
-
+import pytest as pt
 from src.app import app
 from src.modules.storage import memory
 from src.modules.course_attempt.schema import Status
@@ -367,3 +367,16 @@ def seed_user_course_attempts(attempts_key: str):
 
     for attempt in USER_COURSE_ATTEMPTS[attempts_key]:
         memory.course_attempts.append(attempt.copy())
+
+@pt.fixture
+def auth_headers():
+    memory.departments.append({"id": 999, "name": "Auth Test Department", "university_id": 999})
+    client.post("/users/", json={
+        "id": 999, "username": "testadmin", "email": "test@admin.com",
+        "password": "testpass123", "department_id": 999
+    })
+    response = client.post("/auth/token", data={
+        "username": "testadmin", "password": "testpass123", "grant_type": "password"
+    })
+    token = response.json()["access_token"]
+    return {"Authorization": f"Bearer {token}"}
