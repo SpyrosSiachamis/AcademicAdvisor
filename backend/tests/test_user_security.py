@@ -15,7 +15,7 @@ def test_create_user_does_not_return_password_or_password_hash():
         "university_id": 1
     })
 
-    response = client.post("/users/create", json={
+    response = client.post("/users/", json={
         "id": 1,
         "username": "spiros",
         "email": "spiros@example.com",
@@ -39,7 +39,7 @@ def test_get_user_does_not_return_password_or_password_hash():
         "university_id": 1
     })
 
-    create_response = client.post("/users/create", json={
+    create_response = client.post("/users/", json={
         "id": 2,
         "username": "testuser",
         "email": "test@example.com",

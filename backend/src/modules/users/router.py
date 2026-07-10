@@ -1,17 +1,25 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from starlette import status
 from .schema import UserCreate, UserUpdate
 from .services import create_user, get_users, get_user, update_user, delete_user
+# from ..auth.dependencies import get_current_user
+from typing import Annotated
+from .exceptions import (
+    DuplicateUserError,
+    InvalidDepartmentError,
+    UserNotFoundError,
+    UserDeleteError,
+)
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.post('/')
-async def create_user_route(user: UserCreate):
-    return await add_user(user)
-
-@router.post('/create')
+@router.post('/', status_code=status.HTTP_201_CREATED)
 async def add_user(user: UserCreate):
-    created_user = create_user(user)
-    if created_user is None:
-        raise HTTPException(status_code=409, detail="Duplicate user or missing department")
+    try:
+        created_user = create_user(user)
+    except InvalidDepartmentError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except DuplicateUserError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
     return{
         "message": "User Created",
         "created_user": created_user
@@ -24,11 +32,16 @@ async def list_users():
         "users": get_users()
     }
 
+# @router.get('/current-user')
+# async def get_cur_user(user: Annotated[str,Depends(get_current_user)]):
+#     return user
+
 @router.get('/{user_id}')
 async def get_user_by_id(user_id: int):
-    result = get_user(user_id)
-    if(result is None):
-        raise HTTPException(status_code=404, detail=f"User with id: {user_id} does not exist")
+    try:
+        result = get_user(user_id)
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return {
         "message": "User found",
         "user": result
@@ -36,9 +49,14 @@ async def get_user_by_id(user_id: int):
 
 @router.put('/{user_id}')
 async def update_user_by_id(user_id: int, user_update: UserUpdate):
-    result = update_user(user_id, user_update)
-    if result is None:
-        raise HTTPException(status_code=404, detail=f"User with id {user_id} not found, duplicate user, or missing department")
+    try:
+        result = update_user(user_id, user_update)
+    except UserNotFoundError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    except InvalidDepartmentError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except DuplicateUserError as e:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(e))
     return {
         "message": f"User with id {user_id} successfully updated",
         "user": result
@@ -46,9 +64,10 @@ async def update_user_by_id(user_id: int, user_update: UserUpdate):
 
 @router.delete('/{user_id}')
 async def delete_user_by_id(user_id: int):
-    result = delete_user(user_id)
-    if(result is False):
-        raise HTTPException(status_code=404, detail=f"User with id {user_id} not found")
+    try:
+        delete_user(user_id)
+    except UserDeleteError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     return {
         "message": f"User with id {user_id} successfully deleted"
     }
